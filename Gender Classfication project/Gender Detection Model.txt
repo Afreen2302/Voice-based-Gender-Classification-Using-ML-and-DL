@@ -1,0 +1,89 @@
+Gender Classification Project:
+
+index.html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Voice Gender Prediction</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Voice Gender Prediction</h1>
+        <input type="file" id="voiceFile">
+        <button onclick="uploadVoice(event)">Upload Voice</button>
+        <button onclick="predictGender()">Predict Gender</button>
+        <p id="response"></p>
+    </div>
+    <script src="scripts.js"></script>
+</body>
+</html>
+
+styles.css
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.container {
+    text-align: center;
+}
+
+button {
+    margin: 10px;
+    padding: 8px 16px;
+    font-size: 16px;
+}
+
+scripts.js
+function uploadVoice(event) {
+    if (event) {
+        event.preventDefault();  // Prevent the default form submission behavior
+    }
+
+    const fileInput = document.getElementById('voiceFile');
+    const file = fileInput.files[0];
+
+    if (file) {
+        const formData = new FormData();
+        formData.append('file', file);
+
+        fetch('http://127.0.0.1:5000/upload', {
+            method: 'POST',
+            body: formData,
+            mode: 'cors'
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('File uploaded successfully:', data);
+        })
+        .catch(error => {
+            console.error('Error uploading file:', error.message);
+        });
+    } else {
+        console.error('No file selected.');
+    }
+}
+
+
+function predictGender() {
+    fetch('http://127.0.0.1:5000/prediction', {
+        method: 'POST'
+    })
+    .then(response => response.json())
+    .then(data => {
+        document.getElementById('response').innerText = 'Prediction: ' + data.prediction;
+        console.log('Gender prediction:', data);
+    })
+    .catch(error => console.error('Error predicting gender:', error));
+}
+
+2 api endpoints
+Upload Endpoint - To Upload the voice to the server
+Predict Endpoint - To Predict the voice is male or female
