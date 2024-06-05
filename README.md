@@ -1,4 +1,3 @@
-```markdown
 # Gender Classification Project
 
 This project focuses on classifying gender based on audio samples. It utilizes a neural network model to analyze the audio data and determine the gender of the speaker.
